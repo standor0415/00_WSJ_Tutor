@@ -1,0 +1,20 @@
+# Mac System
+.DS_Store
+
+# Credentials
+credentials/
+*.json
+!requirements.txt
+
+# Environment
+.env
+
+# Input
+input/
+# Output 
+output/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
