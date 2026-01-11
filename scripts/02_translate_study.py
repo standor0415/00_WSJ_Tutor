@@ -49,7 +49,9 @@ sheet_id = os.getenv("GOOGLE_SHEET_ID")
 
 # Script path
 script_dir = os.path.dirname(os.path.abspath(__file__))
-file_path = os.path.join(script_dir, "output.md")
+project_root = os.path.dirname(script_dir)
+output_dir = os.path.join(project_root, "output", "markdown")
+file_path = os.path.join(output_dir, "wsj_article_20260111.md")
 
 # Read An article
 with open(file_path, "r", encoding="utf-8") as f:
