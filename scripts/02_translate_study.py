@@ -4,11 +4,13 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from google.oauth2.service_account import Credentials
 from gspread_dataframe import set_with_dataframe
+from datetime import datetime
 
 import os
 import json
 import gspread
 import pandas as pd
+import time
 
 
 # Schema
@@ -59,6 +61,7 @@ with open(file_path, "r", encoding="utf-8") as f:
 
 all_descriptions = []
 all_words = []
+today = datetime.now().strftime("%Y-%m-%d")
 
 # Gemini Client
 with genai.Client(api_key=api_key) as client:
@@ -112,7 +115,7 @@ with genai.Client(api_key=api_key) as client:
     # Translate Body
     for i in range(2, len(content), 3):
         msg = "\n".join(content[i : i + 3]) + "해석해주고 어려운 단어 정리해줘"
-        print(f"Waiting for the {i}-th answer")
+        start_time = time.time()
 
         response = chat.send_message(
             message=msg,
@@ -124,28 +127,41 @@ with genai.Client(api_key=api_key) as client:
         data = json.loads(response.text)
         all_descriptions.append(data["description"])
         all_words.extend(data["words"])
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        print(f"{i}번째 응답 완료 - 소요 시간: {elapsed_time:.2f}초")
 
-with open("description.md", "w", encoding="utf-8") as f:
+description_path = os.path.join(
+    project_root, "output", "translations", f"wsj_translations_{today}.md"
+)
+
+with open(description_path, "w", encoding="utf-8") as f:
     for desc in all_descriptions:
         f.write(desc)
         f.write("\n\n---\n\n")
-
-print("description.md 저장 완료!")
 
 scopes = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive",
 ]
 
-creds = Credentials.from_service_account_file(
-    "groovy-ego-475711-h5-411f4a8f602e.json", scopes=scopes
-)
+service_account_file = "credentials/google_service_account.json"
+
+creds = Credentials.from_service_account_file(service_account_file, scopes=scopes)
 gc = gspread.authorize(creds)
 spreadsheet = gc.open_by_key(sheet_id)
 
 df = pd.DataFrame(all_words)
 df.columns = ["Word", "Meaning", "Example Sentence", "Example (Korean)", "Memorize Tip"]
-df.to_csv("words.csv", index=False, encoding="utf-8")
+df_path = os.path.join(project_root, "output", "vocabulary", f"wsj_vocabs_{today}.csv")
+df.to_csv(df_path, index=False, encoding="utf-8")
 
-worksheet = spreadsheet.sheet1
+sheet_name = f"New_Words_{today}"
+
+try:
+    worksheet = spreadsheet.worksheet(sheet_name)
+except gspread.exceptions.WorksheetNotFound:
+    worksheet = spreadsheet.add_worksheet(title=sheet_name, rows=400, cols=10)
+
+
 set_with_dataframe(worksheet, df, include_index=False)
