@@ -1,0 +1,7 @@
+defaults:
+  - model: gemini_pro
+  - prompt: default
+  - _self_
+
+# Other Setting
+chunk_size: 3

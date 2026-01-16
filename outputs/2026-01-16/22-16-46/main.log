@@ -1,0 +1,22 @@
+[2026-01-16 22:16:51,606][google_genai.models][INFO] - AFC is enabled with max remote calls: 10.
+[2026-01-16 22:17:23,355][httpx][INFO] - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+[2026-01-16 22:17:23,362][google_genai.models][INFO] - AFC is enabled with max remote calls: 10.
+[2026-01-16 22:17:50,019][httpx][INFO] - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+[2026-01-16 22:17:50,022][google_genai.models][INFO] - AFC is enabled with max remote calls: 10.
+[2026-01-16 22:18:20,995][httpx][INFO] - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+[2026-01-16 22:18:21,005][google_genai.models][INFO] - AFC is enabled with max remote calls: 10.
+[2026-01-16 22:18:47,233][httpx][INFO] - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+[2026-01-16 22:18:47,240][google_genai.models][INFO] - AFC is enabled with max remote calls: 10.
+[2026-01-16 22:19:20,937][httpx][INFO] - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+[2026-01-16 22:19:20,949][google_genai.models][INFO] - AFC is enabled with max remote calls: 10.
+[2026-01-16 22:19:44,872][httpx][INFO] - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+[2026-01-16 22:19:44,878][google_genai.models][INFO] - AFC is enabled with max remote calls: 10.
+[2026-01-16 22:20:14,192][httpx][INFO] - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+[2026-01-16 22:20:14,197][google_genai.models][INFO] - AFC is enabled with max remote calls: 10.
+[2026-01-16 22:20:38,058][httpx][INFO] - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+[2026-01-16 22:20:38,065][google_genai.models][INFO] - AFC is enabled with max remote calls: 10.
+[2026-01-16 22:21:05,658][httpx][INFO] - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+[2026-01-16 22:21:05,667][google_genai.models][INFO] - AFC is enabled with max remote calls: 10.
+[2026-01-16 22:21:31,965][httpx][INFO] - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"
+[2026-01-16 22:21:31,972][google_genai.models][INFO] - AFC is enabled with max remote calls: 10.
+[2026-01-16 22:22:01,665][httpx][INFO] - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent "HTTP/1.1 200 OK"

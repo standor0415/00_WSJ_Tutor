@@ -49,7 +49,7 @@ class EnglishStudy(BaseModel):
     words: list[HardWord]
 
 
-def translate_stduy(file_path: Path | str) -> None:
+def translate_stduy(file_path: Path | str, cfg) -> None:
     path = Path(file_path)
     content = path.read_text().split("\n")
 
@@ -59,45 +59,21 @@ def translate_stduy(file_path: Path | str) -> None:
     with genai.Client(api_key=API_KEY) as client:
         # Create a chat
         chat = client.chats.create(
-            model="gemini-3-pro-preview",
+            model=cfg.model.name,
             config=types.GenerateContentConfig(
-                thinking_config=types.ThinkingConfig(thinking_level="low"),
-                system_instruction="""
-            You are an expert English tutor.
-            I will provide segments of English news articles formatted in Markdown.
-            
-            Your task is to generate a structured JSON response following the schema.
-            
-            *** IMPORTANT: 'description' Field Formatting Rules ***
-            You MUST use the following Markdown structure for the 'description' field:
-            
-            ### 🇺🇸 English
-            [Insert Original Text Here]
-            
-            ### 🇰🇷 Korean
-            [Insert Natural Korean Translation Here]
-            
-            ---
-            **💡 Context & Expressions**
-            [First, explain the main context of the news in Korean.]
-            [Second, identify and explain any idioms, phrasal verbs, or common expressions used in the text. Explain why they are used here.]
-            **[CRITICAL: When mentioning specific English keywords, idioms, or important terms within your explanation, you MUST enclose them in backticks (e.g., `break the ice`, `inflation`) for emphasis.]**
-            
-            ---------------------------------------------------------
-            
-            For the 'words' list:
-            - Extract key vocabulary words.
-            - The 'meaning' and 'Memorize_tip' MUST be in **Korean**.
-            - 'Memorize_tip' should be creative, intuitive, and helpful for a Korean learner.
-            """,
+                thinking_config=types.ThinkingConfig(
+                    thinking_level=cfg.model.thinking_config.thinking_level
+                ),
+                system_instruction=cfg.prompt.system_instruction,
             ),
         )
         # Translate Headline
-        msg = "\n".join(content[0:2]) + "\n해석해주고 어려운 단어 정리해줘"
+        msg = cfg.prompt.user_message_template.format(content="\n".join(content[0:2]))
         response = chat.send_message(
             message=msg,
             config=types.GenerateContentConfig(
-                response_mime_type="application/json", response_schema=EnglishStudy
+                response_mime_type=cfg.model.response_config.response_mime_type,
+                response_schema=EnglishStudy,
             ),
         )
 
@@ -105,9 +81,12 @@ def translate_stduy(file_path: Path | str) -> None:
         all_descriptions.append(data["description"])
         all_words.extend(data["words"])
 
+        chunk_size = cfg.chunk_size
         # Translate Body
-        for i in range(2, len(content), 3):
-            msg = "\n".join(content[i : i + 3]) + "해석해주고 어려운 단어 정리해줘"
+        for i in range(2, len(content), chunk_size):
+            msg = cfg.prompt.user_message_template.format(
+                content="\n".join(content[i : i + chunk_size])
+            )
             start_time = time.time()
 
             response = chat.send_message(
@@ -158,7 +137,7 @@ def translate_stduy(file_path: Path | str) -> None:
         "Memorize Tip",
     ]
 
-    vocab_name = path.stem.replace("article", "vocab")
+    vocab_name = path.stem.replace("article", "vocabs")
     df_path = vocab_path / f"{vocab_name}.csv"
     df.to_csv(df_path, index=False, encoding="utf-8")
 

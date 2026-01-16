@@ -1,0 +1,8 @@
+name: gemini-3-pro-preview
+thinking_config:
+  thinking_level: low # low, medium, high
+response_config:
+  response_mime_type: application/json
+  #temperature: 0.7 # optional
+  # top_p: 0.95
+  # max_output_tokens: 8192
